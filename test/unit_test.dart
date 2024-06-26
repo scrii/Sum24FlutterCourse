@@ -1,8 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 
 bool isValidEmail(String email) {
-  // TODO add your validation logic here
-  return false;
+  RegExp emailRegExp = RegExp(
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
+    caseSensitive: false,
+  );
+  return emailRegExp.hasMatch(email);
 }
 
 void main() {
@@ -11,8 +14,20 @@ void main() {
       expect(isValidEmail('test@example.com'), true);
     });
 
-    //  TODO add more test cases for invalid emails
-  });
+    test('w/o a domain', () {
+      expect(isValidEmail('test@'), false);
+    });
 
-  // Test using flutter test test/unit_test.dart
+    test('w/o .com', () {
+      expect(isValidEmail('test@example'), false);
+    });
+
+    test('With space inside a local-part', () {
+      expect(isValidEmail('tes t@example.com'), false);
+    });
+
+    test('w/o a local-part', () {
+      expect(isValidEmail('@example.com'), false);
+    });
+  });
 }
